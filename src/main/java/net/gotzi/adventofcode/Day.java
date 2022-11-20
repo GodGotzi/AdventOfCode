@@ -23,7 +23,7 @@ public abstract class Day {
         File file = createFileStructure();
         try {
             load(file);
-        } catch (FileNotFoundException e) {}
+        } catch (FileNotFoundException e) { }
     }
 
     private void load(File file) throws FileNotFoundException {
@@ -54,10 +54,10 @@ public abstract class Day {
 
         long milli = System.currentTimeMillis();
 
-        int puzzle1Solution = computePuzzle1();
+        long puzzle1Solution = computePuzzle1();
         long puzzle1Time = System.currentTimeMillis() - milli;
 
-        int puzzle2Solution = computePuzzle2();
+        long puzzle2Solution = computePuzzle2();
         long puzzle2Time = System.currentTimeMillis() - puzzle1Time - milli;
 
         long timeSum = System.currentTimeMillis() - milli;
@@ -72,8 +72,8 @@ public abstract class Day {
         return lines;
     }
 
-    public abstract int computePuzzle1();
+    public abstract long computePuzzle1();
 
-    public abstract int computePuzzle2();
+    public abstract long computePuzzle2();
 
 }

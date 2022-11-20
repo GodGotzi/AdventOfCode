@@ -2,16 +2,16 @@ package net.gotzi.adventofcode;
 
 import net.gotzi.adventofcode.api.DayInfo;
 import net.gotzi.adventofcode.api.PuzzleInfo;
-import net.gotzi.adventofcode.year2020.Day1;
+import net.gotzi.adventofcode.year2020.Day3;
 
 public class Loader {
 
     private static Day loadDay() {
-        return new Day1();
+        return new Day3();
     }
 
     private static void printPuzzle(PuzzleInfo info, int num) {
-        System.out.println("Puzzle 1");
+        System.out.println("Puzzle " + num);
         System.out.printf("Computing time: %d%n", info.millis());
         System.out.printf("SOLUTION: %d%n", info.solution());
     }
