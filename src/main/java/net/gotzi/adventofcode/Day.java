@@ -3,10 +3,9 @@ package net.gotzi.adventofcode;
 import net.gotzi.adventofcode.api.DayInfo;
 import net.gotzi.adventofcode.api.PuzzleInfo;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 public abstract class Day {
@@ -15,6 +14,7 @@ public abstract class Day {
     private final int year;
 
     private List<String> lines;
+    private String content;
 
     public Day(int day, int year) {
         this.day = day;
@@ -23,12 +23,15 @@ public abstract class Day {
         File file = createFileStructure();
         try {
             load(file);
-        } catch (FileNotFoundException e) { }
+        } catch (IOException e) { }
     }
 
-    private void load(File file) throws FileNotFoundException {
+    private void load(File file) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(file));
         this.lines = reader.lines().toList();
+
+        Path path = Path.of(file.toURI());
+        this.content = Files.readString(path);
     }
 
     private File createFileStructure() {
@@ -70,6 +73,10 @@ public abstract class Day {
 
     public List<String> getLines() {
         return lines;
+    }
+
+    public String getContent() {
+        return content;
     }
 
     public abstract long computePuzzle1();

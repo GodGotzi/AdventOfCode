@@ -3,11 +3,12 @@ package net.gotzi.adventofcode;
 import net.gotzi.adventofcode.api.DayInfo;
 import net.gotzi.adventofcode.api.PuzzleInfo;
 import net.gotzi.adventofcode.year2020.Day3;
+import net.gotzi.adventofcode.year2022.Day1;
 
 public class Loader {
 
     private static Day loadDay() {
-        return new Day3();
+        return new Day1();
     }
 
     private static void printPuzzle(PuzzleInfo info, int num) {
