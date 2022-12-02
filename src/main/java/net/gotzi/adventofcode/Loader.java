@@ -4,17 +4,18 @@ import net.gotzi.adventofcode.api.DayInfo;
 import net.gotzi.adventofcode.api.PuzzleInfo;
 import net.gotzi.adventofcode.year2020.Day3;
 import net.gotzi.adventofcode.year2022.Day1;
+import net.gotzi.adventofcode.year2022.Day2;
 
 public class Loader {
 
     private static Day loadDay() {
-        return new Day1();
+        return new Day2();
     }
 
     private static void printPuzzle(PuzzleInfo info, int num) {
         System.out.println("Puzzle " + num);
-        System.out.printf("Computing time: %d%n", info.millis());
-        System.out.printf("SOLUTION: %d%n", info.solution());
+        System.out.printf("Computing time: %dms%n", info.millis());
+        System.out.printf("SOLUTION: %dms%n", info.solution());
     }
 
     public static void main(String[] args) {
@@ -34,7 +35,7 @@ public class Loader {
         printPuzzle(dayInfo.puzzle2(), 2);
         System.out.print("\n");
         System.out.println("~".repeat(50));
-        System.out.printf("Sum of computing time: %d%n", dayInfo.millis());
+        System.out.printf("Sum of computing time: %dms%n", dayInfo.millis());
         System.out.println("~".repeat(50));
     }
 
