@@ -5,11 +5,12 @@ import net.gotzi.adventofcode.api.PuzzleInfo;
 import net.gotzi.adventofcode.year2022.Day1;
 import net.gotzi.adventofcode.year2022.Day2;
 import net.gotzi.adventofcode.year2022.Day3;
+import net.gotzi.adventofcode.year2022.Day4;
 
 public class Loader {
 
     private static Day loadDay() {
-        return new Day3();
+        return new Day4();
     }
 
     private static void printPuzzle(PuzzleInfo info, int num) {
