@@ -1,5 +1,5 @@
 package net.gotzi.adventofcode.api;
 
-public record PuzzleInfo(long millis, long solution) {
+public record PuzzleInfo<T>(long millis, T solution) {
 
 }

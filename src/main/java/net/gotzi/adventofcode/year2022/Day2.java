@@ -2,14 +2,14 @@ package net.gotzi.adventofcode.year2022;
 
 import net.gotzi.adventofcode.Day;
 
-public class Day2 extends Day {
+public class Day2 extends Day<Long> {
 
     public Day2() {
         super(2, 2022);
     }
 
     @Override
-    public long computePuzzle1() {
+    public Long computePuzzle1() {
         int totalScore = 0;
 
         for (String line : getLines()) {
@@ -21,7 +21,7 @@ public class Day2 extends Day {
             totalScore += checkWin(opponent - 'A', me - 'X');
         }
 
-        return totalScore;
+        return (long) totalScore;
     }
 
     private int checkWin(int opponent, int me) {
@@ -34,7 +34,7 @@ public class Day2 extends Day {
     }
 
     @Override
-    public long computePuzzle2() {
+    public Long computePuzzle2() {
         int totalScore = 0;
 
         for (String line : getLines()) {
@@ -53,6 +53,6 @@ public class Day2 extends Day {
             }
         }
 
-        return totalScore;
+        return (long) totalScore;
     }
 }

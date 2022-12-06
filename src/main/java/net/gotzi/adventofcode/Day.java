@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-public abstract class Day {
+public abstract class Day<T> {
 
     private final int day;
     private final int year;
@@ -23,7 +23,7 @@ public abstract class Day {
         File file = createFileStructure();
         try {
             load(file);
-        } catch (IOException e) { }
+        } catch (IOException ignored) { }
     }
 
     private void load(File file) throws IOException {
@@ -57,18 +57,16 @@ public abstract class Day {
 
         long milli = System.currentTimeMillis();
 
-        long puzzle1Solution = computePuzzle1();
+        T puzzle1Solution = computePuzzle1();
         long puzzle1Time = System.currentTimeMillis() - milli;
 
-        long puzzle2Solution = computePuzzle2();
+        T puzzle2Solution = computePuzzle2();
         long puzzle2Time = System.currentTimeMillis() - puzzle1Time - milli;
 
         long timeSum = System.currentTimeMillis() - milli;
 
-        DayInfo dayInfo = new DayInfo(this.day, this.year, new PuzzleInfo(puzzle1Time, puzzle1Solution),
-                new PuzzleInfo(puzzle2Time, puzzle2Solution), timeSum);
-
-        return dayInfo;
+        return new DayInfo<>(this.day, this.year, new PuzzleInfo<>(puzzle1Time, puzzle1Solution),
+                new PuzzleInfo<>(puzzle2Time, puzzle2Solution), timeSum);
     }
 
     public List<String> getLines() {
@@ -79,8 +77,8 @@ public abstract class Day {
         return content;
     }
 
-    public abstract long computePuzzle1();
+    public abstract T computePuzzle1();
 
-    public abstract long computePuzzle2();
+    public abstract T computePuzzle2();
 
 }

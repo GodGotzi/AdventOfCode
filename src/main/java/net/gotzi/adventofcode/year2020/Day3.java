@@ -4,14 +4,14 @@ import net.gotzi.adventofcode.Day;
 
 import java.util.List;
 
-public class Day3 extends Day {
+public class Day3 extends Day<Long> {
 
     public Day3() {
         super(3, 2020);
     }
 
     @Override
-    public long computePuzzle1() {
+    public Long computePuzzle1() {
         final List<String> lines = getLines();
         char[][] grid = new char[lines.size()][lines.get(0).length()];
 
@@ -19,7 +19,7 @@ public class Day3 extends Day {
             grid[i] = lines.get(i).toCharArray();
         }
 
-        return encounter(grid, 1, 3);
+        return (long) encounter(grid, 1, 3);
     }
 
     private int encounter(char[][] grid, int right, int down) {
@@ -42,7 +42,7 @@ public class Day3 extends Day {
     }
 
     @Override
-    public long computePuzzle2() {
+    public Long computePuzzle2() {
         final List<String> lines = getLines();
         char[][] grid = new char[lines.size()][lines.get(0).length()];
 

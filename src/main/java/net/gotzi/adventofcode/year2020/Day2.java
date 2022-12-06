@@ -4,14 +4,14 @@ import net.gotzi.adventofcode.Day;
 
 import java.util.List;
 
-public class Day2 extends Day {
+public class Day2 extends Day<Long> {
 
     public Day2() {
         super(2, 2020);
     }
 
     @Override
-    public long computePuzzle1() {
+    public Long computePuzzle1() {
         List<String> lines = getLines();
         String[] args;
         char scope;
@@ -29,7 +29,7 @@ public class Day2 extends Day {
             if (isValidPuzzle1(scope, lower, upper, args[2])) sum++;
         }
 
-        return sum;
+        return (long) sum;
     }
 
     private boolean isValidPuzzle1(char scope, int lower, int upper, String pw) {
@@ -45,7 +45,7 @@ public class Day2 extends Day {
     }
 
     @Override
-    public long computePuzzle2() {
+    public Long computePuzzle2() {
         List<String> lines = getLines();
         String[] args;
         char scope;
@@ -63,7 +63,7 @@ public class Day2 extends Day {
             if (isValidPuzzle2(scope, lower, upper, args[2])) sum++;
         }
 
-        return sum;
+        return (long) sum;
     }
 
     private boolean isValidPuzzle2(char scope, int lower, int upper, String pw) {

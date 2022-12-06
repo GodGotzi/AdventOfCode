@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class Day4 extends Day {
+public class Day4 extends Day<Long> {
     public Day4() {
         super(4, 2022);
     }
 
     @Override
-    public long computePuzzle1() {
+    public Long computePuzzle1() {
         int amount = 0;
 
         for (String line : getLines()) {
@@ -24,7 +24,7 @@ public class Day4 extends Day {
                 amount++;
         }
 
-        return amount;
+        return (long) amount;
     }
 
     private HashSet<Integer> getRange(String section) {
@@ -40,7 +40,7 @@ public class Day4 extends Day {
     }
 
     @Override
-    public long computePuzzle2() {
+    public Long computePuzzle2() {
 
         int amount = 0;
 
@@ -53,7 +53,7 @@ public class Day4 extends Day {
                 amount++;
         }
 
-        return amount;
+        return (long) amount;
     }
 
     private boolean containsAny(HashSet<Integer> section1, HashSet<Integer> section2) {

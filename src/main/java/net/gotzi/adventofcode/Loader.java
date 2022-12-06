@@ -2,28 +2,29 @@ package net.gotzi.adventofcode;
 
 import net.gotzi.adventofcode.api.DayInfo;
 import net.gotzi.adventofcode.api.PuzzleInfo;
+import net.gotzi.adventofcode.year2020.Day3;
 import net.gotzi.adventofcode.year2022.Day1;
 import net.gotzi.adventofcode.year2022.Day2;
-import net.gotzi.adventofcode.year2022.Day3;
-import net.gotzi.adventofcode.year2022.Day4;
+import net.gotzi.adventofcode.year2022.Day5;
+import net.gotzi.adventofcode.year2022.Day6;
 
 public class Loader {
 
-    private static Day loadDay() {
-        return new Day4();
+    private static Day<?> loadDay() {
+        return new Day5();
     }
 
-    private static void printPuzzle(PuzzleInfo info, int num) {
+    private static void printPuzzle(PuzzleInfo<?> info, int num) {
         System.out.println("Puzzle " + num);
         System.out.printf("Computing time: %dms%n", info.millis());
-        System.out.printf("SOLUTION: %d%n", info.solution());
+        System.out.printf("SOLUTION: " + info.solution() + "\n");
     }
 
     public static void main(String[] args) {
-        Day day = loadDay();
+        Day<?> day = loadDay();
 
 
-        DayInfo dayInfo = day.run();
+        DayInfo<?> dayInfo = day.run();
 
         System.out.println("~".repeat(50));
         System.out.printf("Day %d Year %d%n", dayInfo.day(), dayInfo.year());

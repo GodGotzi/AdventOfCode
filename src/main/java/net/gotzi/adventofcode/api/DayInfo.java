@@ -1,5 +1,5 @@
 package net.gotzi.adventofcode.api;
 
-public record DayInfo(int day, int year, PuzzleInfo puzzle1, PuzzleInfo puzzle2, long millis) {
+public record DayInfo<T>(int day, int year, PuzzleInfo<T> puzzle1, PuzzleInfo<T> puzzle2, long millis) {
 }
 

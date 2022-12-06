@@ -6,14 +6,14 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Day1 extends Day {
+public class Day1 extends Day<Long> {
 
     public Day1() {
         super(1, 2022);
     }
 
     @Override
-    public long computePuzzle1() {
+    public Long computePuzzle1() {
         int max = 0;
         int sum = 0;
 
@@ -29,11 +29,11 @@ public class Day1 extends Day {
         }
 
 
-        return max;
+        return (long) max;
     }
 
     @Override
-    public long computePuzzle2() {
+    public Long computePuzzle2() {
         List<Integer> elves = new LinkedList<>();
 
         int sum = 0;
@@ -49,6 +49,6 @@ public class Day1 extends Day {
 
         Collections.sort(elves);
 
-        return elves.get(elves.size()-1) + elves.get(elves.size()-2) + elves.get(elves.size()-3);
+        return (long) (elves.get(elves.size()-1) + elves.get(elves.size()-2) + elves.get(elves.size()-3));
     }
 }

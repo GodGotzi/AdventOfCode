@@ -4,7 +4,7 @@ import net.gotzi.adventofcode.Day;
 
 import java.util.*;
 
-public class Day5 extends Day {
+public class Day5 extends Day<String> {
 
 
     public Day5() {
@@ -12,7 +12,7 @@ public class Day5 extends Day {
     }
 
     @Override
-    public long computePuzzle1() {
+    public String computePuzzle1() {
         List<String> commands = new ArrayList<>();
         List<Stack<Character>> stacks = new ArrayList<>();
         boolean stackAmountFound = false;
@@ -45,20 +45,15 @@ public class Day5 extends Day {
                 stacks.remove(stack);
         });
 
-        stacks.forEach(System.out::println);
-
-
-
         compute(commands, stacks);
 
-        System.out.print("Solution 1: ");
+        StringBuilder stringBuilder = new StringBuilder();
         stacks.forEach(stack -> {
             if (!stack.isEmpty())
-                System.out.print(stack.peek());
+                stringBuilder.append(stack.peek());
         });
-        System.out.print("\n");
 
-        return 0;
+        return stringBuilder.toString();
     }
 
     private void compute(List<String> commands, List<Stack<Character>> stacks) {
@@ -80,7 +75,7 @@ public class Day5 extends Day {
     }
 
     @Override
-    public long computePuzzle2() {
+    public String computePuzzle2() {
         List<String> commands = new ArrayList<>();
         List<Stack<Character>> stacks = new ArrayList<>();
         boolean stackAmountFound = false;
@@ -113,16 +108,15 @@ public class Day5 extends Day {
                 stacks.remove(stack);
         });
 
-        stacks.forEach(System.out::println);
-
         compute2(commands, stacks);
 
+        StringBuilder stringBuilder = new StringBuilder();
         stacks.forEach(stack -> {
             if (!stack.isEmpty())
-                System.out.print(stack.peek());
+                stringBuilder.append(stack.peek());
         });
 
-        return 0;
+        return stringBuilder.toString();
     }
 
     private void compute2(List<String> commands, List<Stack<Character>> stacks) {
