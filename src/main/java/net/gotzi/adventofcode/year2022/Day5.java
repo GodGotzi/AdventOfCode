@@ -143,8 +143,6 @@ public class Day5 extends Day<String> {
             Collections.reverse(stack);
 
             stacks.get(to-1).addAll(stack);
-
-            //stacks.forEach(System.out::println);
         }
     }
 }
