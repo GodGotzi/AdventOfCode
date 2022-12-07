@@ -14,23 +14,20 @@ public class Day7 extends Day<Long> {
     @Override
     public Long computePuzzle1() {
         Directory directory = new Directory("/", null);
-        Directory parentDirectory = directory;
-        String line;
-
-        for (int i = 0; i < getLines().size(); i++) {
-            line = getLines().get(i);
-
-            if (line.contains("$") && !line.equals("$ cd /")) {
-                if (line.contains("ls")) {
-                    lsCMD(directory, i);
-                } else if (line.contains("cd")) {
-                    directory = cdCMD(directory, line);
-                }
-            }
-        }
+        loadFileTree(directory);
 
 
-        return sumUpDirectories(parentDirectory);
+        return sumUpDirectories(directory);
+    }
+
+    private boolean isDirExisting(Directory directory, String dirName) {
+        return directory.getElements().stream()
+                .anyMatch(element -> element instanceof Directory dir && dir.getName().equals(dirName));
+    }
+
+    private boolean isFileExisting(Directory directory, String dirName) {
+        return directory.getElements().stream()
+                .anyMatch(element -> element instanceof File file && file.getName().equals(dirName));
     }
 
     private Directory cdCMD(Directory directory, String line) {
@@ -47,7 +44,13 @@ public class Day7 extends Day<Long> {
 
             if (optionalDirectory.isPresent())
                 directory = (Directory) optionalDirectory.get();
+            else {
+                Directory newDir = new Directory(args[2], directory);
+                directory.getElements().add(newDir);
+                directory = newDir;
+            }
         }
+
         return directory;
     }
 
@@ -58,17 +61,21 @@ public class Day7 extends Day<Long> {
         while (j < getLines().size() && !getLines().get(j).contains("$")) {
             args = getLines().get(j).split(" ");
             if (getLines().get(j).contains("dir")) {
-                directory.getElements().add(
-                        new Directory(args[1], directory)
-                );
+                if (!isDirExisting(directory, args[1])) {
+                    directory.getElements().add(
+                            new Directory(args[1], directory)
+                    );
+                }
             } else {
-                long size = Long.parseLong(args[0]);
+                if (!isFileExisting(directory, args[1])) {
+                    long size = Long.parseLong(args[0]);
 
-                directory.getElements().add(
-                        new File(args[1], size)
-                );
+                    directory.getElements().add(
+                            new File(args[1], size)
+                    );
 
-                directory.addSize(size);
+                    directory.addSize(size);
+                }
             }
 
             j++;
@@ -81,10 +88,10 @@ public class Day7 extends Day<Long> {
         for (Element element : parentDirectory.getElements()) {
             if (element instanceof Directory dir) {
                 if (dir.size <= 100000) {
-                    System.out.println(dir.getName());
                     size += dir.size;
-                    size += sumUpDirectories(dir);
                 }
+
+                size += sumUpDirectories(dir);
             }
         }
 
@@ -93,11 +100,46 @@ public class Day7 extends Day<Long> {
 
     @Override
     public Long computePuzzle2() {
+        Directory directory = new Directory("/", null);
+        loadFileTree(directory);
 
+        return findDirectoryToDelete(30000000 - (70000000 - directory.size), directory);
+    }
 
+    private void loadFileTree(Directory directory) {
+        String line;
 
+        for (int i = 0; i < getLines().size(); i++) {
+            line = getLines().get(i);
 
-        return null;
+            if (line.contains("$") && !line.equals("$ cd /")) {
+                if (line.contains("ls")) {
+                    lsCMD(directory, i);
+                } else if (line.contains("cd")) {
+                    directory = cdCMD(directory, line);
+                }
+            }
+        }
+    }
+
+    private long findDirectoryToDelete(long neededSpace, Directory dir) {
+        long leastSpace = 70000000;
+        long space;
+
+        for (Element element : dir.getElements()) {
+            if (element instanceof Directory newdir) {
+                space = findDirectoryToDelete(neededSpace, newdir);
+                if (neededSpace <= newdir.size && leastSpace > newdir.size) {
+                    leastSpace = newdir.size;
+                }
+
+                if (neededSpace <= space && leastSpace > space) {
+                    leastSpace = space;
+                }
+            }
+        }
+
+        return leastSpace;
     }
 
     public static class Element {
@@ -129,14 +171,6 @@ public class Day7 extends Day<Long> {
             return elements;
         }
 
-        public void setSize(long size) {
-            this.size = size;
-        }
-
-        public long getSize() {
-            return size;
-        }
-
         public void addSize(long size) {
             if (this.parent != null)
                 this.parent.addSize(size);
@@ -165,10 +199,6 @@ public class Day7 extends Day<Long> {
             super(name);
 
             this.size = size;
-        }
-
-        public long getSize() {
-            return size;
         }
 
         @Override
