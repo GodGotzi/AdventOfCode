@@ -8,7 +8,7 @@ import net.gotzi.adventofcode.year2022.*;
 public class Loader {
 
     private static Day<?> loadDay() {
-        return new Day7();
+        return new Day8();
     }
 
     private static void printPuzzle(PuzzleInfo<?> info, int num) {
