@@ -58,50 +58,40 @@ public class Day10 extends Day<String> {
         return X;
     }
 
-
-
     @Override
     public String computePuzzle2() {
         int cycle = 0;
-        long sum = 0;
 
         String line;
-        StringBuilder screen = new StringBuilder();
-        screen.append("\n");
+        StringBuilder screen = new StringBuilder("\n");
 
         for (int i = 0; i < getLines().size(); i++) {
             line = getLines().get(i);
             if (line.contains("noop")) {
-                sum += computeScreenPixel(screen, cycle, 1, i);
+                computeScreenPixel(screen, cycle, 1, i);
                 ++cycle;
             } else {
-                sum += computeScreenPixel(screen, cycle, 2, i-1);
+                computeScreenPixel(screen, cycle, 2, i-1);
                 cycle += 2;
             }
         }
 
-        System.out.println(screen);
-
         return screen.toString();
     }
 
-    private long computeScreenPixel(StringBuilder screen, int cycle, int increase, int index) {
+    private void computeScreenPixel(StringBuilder screen, int cycle, int increase, int index) {
         int X = getXto(index);
         int CRTLocation;
-        System.out.println(X);
         int i;
 
-        for (i = cycle + 1 ; i <= cycle + increase; i++) {
-            CRTLocation = (i % 40);
-            if (Math.abs(CRTLocation-X-1) <= 1)
+        for (i = cycle+1; i <= cycle + increase; i++) {
+            CRTLocation = (i-1) % 40;
+
+            if (Math.abs(X - CRTLocation) <= 1) {
                 screen.append("#");
-            else screen.append(" ");
+            } else screen.append(" ");
 
-            if (i % 40 == 0) {
-                screen.append("\n");
-            }
+            if (CRTLocation == 39) screen.append("\n");
         }
-
-        return 0;
     }
 }
