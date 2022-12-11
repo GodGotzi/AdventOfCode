@@ -15,13 +15,15 @@ public class Day11 extends Day<Long> {
     public Long computePuzzle1() {
         List<Monkey> monkeys = load();
 
+        long divisorMod = calculateDivisorMod(monkeys);
+
         for (int i = 0; i < 20; i++) {
             for (Monkey monkey : monkeys) {
                 for (Item item : monkey.getItemList()) {
-                    item.runOperationSimple(monkey.getOperation().op, monkey.getOperation().num);
-                    item.runOperationSimple('/', 3);
+                    item.runOperation(monkey.getOperation().op, monkey.getOperation().num, divisorMod);
+                    item.runOperation('/', 3, divisorMod);
 
-                    monkey.moveItem(item, monkey.getTest().testSimple(item), monkeys);
+                    monkey.moveItem(item, monkey.getTest().test(item), monkeys);
                     monkey.inspections++;
                 }
 
@@ -77,12 +79,14 @@ public class Day11 extends Day<Long> {
     public Long computePuzzle2() {
         List<Monkey> monkeys = load();
 
+        long divisorMod = calculateDivisorMod(monkeys);
+
         for (int i = 0; i < 10000; i++) {
             for (Monkey monkey : monkeys) {
                 for (Item item : monkey.getItemList()) {
                     int monkeyIndex;
 
-                    item.runOperation(monkey.getOperation().op, monkey.getOperation().num);
+                    item.runOperation(monkey.getOperation().op, monkey.getOperation().num, divisorMod);
                     monkeyIndex = monkey.getTest().test(item);
 
                     monkey.moveItem(item, monkeyIndex, monkeys);
@@ -102,6 +106,16 @@ public class Day11 extends Day<Long> {
         });
 
         return ((long) monkeys.get(0).inspections * monkeys.get(1).inspections);
+    }
+
+    private long calculateDivisorMod(List<Monkey> monkeys) {
+        long product = 1;
+
+        for (Monkey monkey : monkeys) {
+            product *= monkey.test.divisor;
+        }
+
+        return product;
     }
 
     public static class Monkey {
@@ -156,31 +170,7 @@ public class Day11 extends Day<Long> {
     public record Test(int divisor, int monkeyIndexTrue, int monkeyIndexFalse) {
 
         public int test(Item item) {
-            long worryLevel = item.startWorryLevel;
-            long opNum;
-
-            for (Operation operation : item.operations) {
-                if (operation.num == -1)
-                    opNum = worryLevel;
-                else opNum = operation.num;
-
-                switch (operation.op) {
-                    case '+' -> worryLevel += opNum;
-                    case '*' -> worryLevel *= opNum;
-                    case '-' -> worryLevel -= opNum;
-                    case '/' -> worryLevel /= opNum;
-                }
-
-                worryLevel = worryLevel % divisor;
-            }
-
-            if (worryLevel % divisor == 0)
-                return monkeyIndexTrue;
-            else return monkeyIndexFalse;
-        }
-
-        public int testSimple(Item item) {
-            if (item.startWorryLevel % divisor == 0)
+            if (item.worryLevel % divisor == 0)
                 return monkeyIndexTrue;
             else return monkeyIndexFalse;
         }
@@ -218,34 +208,30 @@ public class Day11 extends Day<Long> {
 
     public static class Item {
 
-        private long startWorryLevel;
-        private final List<Operation> operations;
+        private long worryLevel;
 
         public Item(long startWorryLevel) {
-            this.startWorryLevel = startWorryLevel;
-            this.operations = new ArrayList<>();
+            this.worryLevel = startWorryLevel;
         }
 
-        public void runOperation(char operation, long num) {
-            operations.add(new Operation(operation, num));
-        }
-
-        public void runOperationSimple(char operation, long num) {
+        public void runOperation(char operation, long num, long divisorMod) {
             if (num == -1)
-                num = startWorryLevel;
+                num = worryLevel;
 
             switch (operation) {
-                case '+' -> startWorryLevel += num;
-                case '*' -> startWorryLevel *= num;
-                case '-' -> startWorryLevel -= num;
-                case '/' -> startWorryLevel /= num;
+                case '+' -> worryLevel += num;
+                case '*' -> worryLevel *= num;
+                case '-' -> worryLevel -= num;
+                case '/' -> worryLevel /= num;
             }
+
+            worryLevel %= divisorMod;
         }
 
         @Override
         public String toString() {
             return "Item{" +
-                    "worryLevel=" + startWorryLevel +
+                    "worryLevel=" + worryLevel +
                     '}';
         }
     }

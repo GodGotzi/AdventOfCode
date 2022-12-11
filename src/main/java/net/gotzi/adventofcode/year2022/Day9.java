@@ -16,73 +16,81 @@ public class Day9 extends Day<Long> {
         Point tail = new Point(0, 0);
         Point head = new Point(0, 0);
         List<Point> points = new ArrayList<>();
-        Point lastHeadPoint;
 
         for (String line : getLines()) {
             char direction = line.charAt(0);
-            int amount = line.charAt(2) - '0';
+            int amount = Integer.parseInt(line.split(" ")[1]);
 
             for (int i = 0; i < amount; i++) {
-                lastHeadPoint = new Point(head.row, head.colum);
-
                 switch (direction) {
                     case 'R' -> head.colum += 1;
                     case 'L' -> head.colum -= 1;
                     case 'D' -> head.row -= 1;
                     case 'U' -> head.row += 1;
                 }
-                
-                tail = calculateNewTailPoint(tail, lastHeadPoint, head);
-                        
-                if (!containsPoint(points, tail))
-                    points.add(tail);
+
+                moveTail(tail, head);
+
+                if (needsPoint(points, tail))
+                    points.add(new Point(tail.row, tail.colum));
             }
         }
-
-        int size = getHighestCoordinate(points) + 2;
-        this.printGrid(points, size);
 
         return (long) points.size();
     }
 
-    private void printGrid(List<Point> points, int highestScore) {
-        char[][] grid = new char[highestScore*2][highestScore*2];
-
-        points.forEach(point -> grid[point.row + highestScore][point.colum + highestScore] = '#');
-
-        for (int i = grid.length-1; i >= 0; i--) {
-            for (int j = 0; j < grid[i].length; j++) {
-                System.out.print((grid[i][j] == '#' ? '#' : ' '));
-            }
-
-            System.out.print("\n");
+    private void moveTail(Point tail, Point head) {
+        if (!isTouching(tail, head)) {
+            tail.row += head.row == tail.row ? 0 : (head.row- tail.row) / Math.abs(head.row-tail.row);
+            tail.colum += head.colum == tail.colum ? 0 : (head.colum- tail.colum) / Math.abs(head.colum-tail.colum);
         }
     }
 
-    private int getHighestCoordinate(List<Point> points) {
-        int max = 0;
-
-        for (Point p : points) max = Math.max(Math.max(p.row, p.colum), max);
-
-        return max;
+    private boolean isTouching(Point tail, Point head) {
+        return Math.abs(head.row- tail.row) <= 1 && Math.abs(head.colum-tail.colum) <= 1;
     }
 
-    private Point calculateNewTailPoint(Point tailPoint, Point lastHeadPoint, Point newHeadPoint) {
-        Point tail = new Point(tailPoint.row, tailPoint.colum);
-
-        if (Math.abs(newHeadPoint.row-tailPoint.row) + Math.abs(newHeadPoint.colum -tailPoint.colum) > 2) {
-            tail.row = lastHeadPoint.row;
-            tail.colum = lastHeadPoint.colum;
-        } else if (Math.abs(newHeadPoint.colum-tailPoint.colum) > 1 || Math.abs(tailPoint.colum-newHeadPoint.colum) > 1)
-            tail.colum += tailPoint.colum < newHeadPoint.colum ? 1 : -1;
-        else if (Math.abs(newHeadPoint.row-tailPoint.row) > 1 || Math.abs(tailPoint.row-newHeadPoint.row) > 1)
-            tail.row += tailPoint.row < newHeadPoint.row ? 1 : -1;
-
-        return tail;
+    private void moveRope(Point[] knots) {
+        for (int i = 1; i < knots.length; i++) {
+            moveTail(knots[i], knots[i-1]);
+        }
     }
 
-    private boolean containsPoint(List<Point> points, Point point) {
-        return points.stream().anyMatch(p -> point.colum == p.colum && point.row == p.row);
+    private boolean needsPoint(List<Point> points, Point point) {
+        return points.stream().noneMatch(p -> point.colum == p.colum && point.row == p.row);
+    }
+
+    @Override
+    public Long computePuzzle2() {
+        Point[] knots = new Point[10];
+        Point tail;
+
+        for (int i = 0; i < knots.length; i++) {
+            knots[i] = new Point(0, 0);
+        }
+
+        List<Point> points = new ArrayList<>();
+
+        for (String line : getLines()) {
+            char direction = line.charAt(0);
+            int amount = Integer.parseInt(line.split(" ")[1]);
+
+            for (int i = 0; i < amount; i++) {
+                switch (direction) {
+                    case 'R' -> knots[0].colum += 1;
+                    case 'L' -> knots[0].colum -= 1;
+                    case 'D' -> knots[0].row -= 1;
+                    case 'U' -> knots[0].row += 1;
+                }
+
+                moveRope(knots);
+
+                if (needsPoint(points, knots[9]))
+                    points.add(new Point(knots[9].row, knots[9].colum));
+            }
+        }
+
+        return (long) points.size();
     }
 
     public static class Point {
@@ -92,14 +100,6 @@ public class Day9 extends Day<Long> {
         public Point(int row, int colum) {
             this.row = row;
             this.colum = colum;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            Point point = (Point) o;
-            return row == point.row && colum == point.colum;
         }
 
         @Override
@@ -114,10 +114,5 @@ public class Day9 extends Day<Long> {
                     ", colum=" + colum +
                     '}';
         }
-    }
-
-    @Override
-    public Long computePuzzle2() {
-        return null;
     }
 }
