@@ -63,7 +63,6 @@ public class Day9 extends Day<Long> {
     @Override
     public Long computePuzzle2() {
         Point[] knots = new Point[10];
-        Point tail;
 
         for (int i = 0; i < knots.length; i++) {
             knots[i] = new Point(0, 0);
